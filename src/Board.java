@@ -185,7 +185,7 @@ public class Board extends JPanel implements ActionListener {
     private void gameOver(Graphics g)
     {
         Map<String, Integer> Scoreboard=sortByValues(results);
-        System.out.println(Scoreboard);
+
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.setColor(Color.red);
         g.drawString("ScoreBoard",50,50);
@@ -193,6 +193,7 @@ public class Board extends JPanel implements ActionListener {
         for(int i=1;i<Scoreboard.size()+1&&i<10;i++)
         {
             g.drawString(i+".  "+(String) Scoreboard.keySet().toArray()[i-1], 50, 50+i*20);
+            g.drawString(Scoreboard.values().toArray()[i-1].toString(), 200, 50+i*20);
         }
         g.setColor(Color.CYAN);
         g.drawString("Game Over",x.length/2-50,y.length/2);
