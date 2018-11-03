@@ -1,5 +1,7 @@
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UdpClient extends Thread {
 
@@ -9,6 +11,7 @@ public class UdpClient extends Thread {
     public DatagramPacket packet1;
     public byte[] bytes;
     public int type;
+
     public  UdpClient(Board board,String ipAddress)
     {
         this.board=board;
@@ -39,6 +42,7 @@ public class UdpClient extends Thread {
              DataInputStream dataIn = new DataInputStream(byteIn);
             try {
                 type = dataIn.readInt();
+                System.out.println(type);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -46,7 +50,7 @@ public class UdpClient extends Thread {
             {
                 try {
                     board.NR=dataIn.readInt();
-                    System.out.println(board.NR);
+                   // System.out.println(board.NR);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -54,6 +58,7 @@ public class UdpClient extends Thread {
             }
             if(type==2)
             {
+                System.out.println("GAME START");
                 try {
                     board.inGame=dataIn.readBoolean();
                     if (board.inGame==false){
@@ -112,6 +117,26 @@ public class UdpClient extends Thread {
                 board.ready=false;
                 System.out.println(" Player time out" +
                         "");
+            }
+            if(type==10)
+            { board.results.clear();
+                try {
+                    int Elements=dataIn.readInt();// amount of Results
+                    for(int j=0;j<Elements;j++)
+                    {
+                        int chars=dataIn.readInt();
+                        String Name="";
+                        for(int i=0;i<chars;i++)
+                        {
+                            Name+=dataIn.readChar();
+                        }
+                        int Value=dataIn.readInt();
+                        board.results.put(Name,Value);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
 
         }

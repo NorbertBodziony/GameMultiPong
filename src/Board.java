@@ -9,6 +9,8 @@ import java.awt.event.KeyEvent;
 import java.awt.Graphics;
 import java.io.*;
 import java.net.DatagramPacket;
+import java.util.*;
+import java.util.stream.Stream;
 import javax.swing.Timer;
 import javax.xml.crypto.Data;
 
@@ -31,7 +33,8 @@ public class Board extends JPanel implements ActionListener {
     public  int frameInLastSecond = 0;
     public  int framesInCurrentSecond = 0;
     public boolean init;
-
+    public String Name;
+    public Map<String, Integer> results = new HashMap<>();
 
     public ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
     public DataOutputStream dataOut = new DataOutputStream(byteOut);
@@ -41,9 +44,10 @@ public class Board extends JPanel implements ActionListener {
     Ball ball1;
     public  Board() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
          width = screenSize.getWidth()/2;
          height = screenSize.getHeight()/2-50;
-        System.out.println(width +" "+height);
+
         x=new int[(int)width];
         y=new int[(int)height];
         addKeyListener(new TAdapter());
@@ -52,7 +56,14 @@ public class Board extends JPanel implements ActionListener {
         setDoubleBuffered(true);
         setPreferredSize(new Dimension((int)width,(int) height));
          ball1=new Ball((int)width/2,(int)height/2,(int)width,(int)height);
-
+        this.Name = (String)JOptionPane.showInputDialog(
+                this,
+                "Enter Your Name",
+                "Game",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                null,
+                "Nobody");
         initGame();
     }
     private void initGame()  {
@@ -65,8 +76,11 @@ public class Board extends JPanel implements ActionListener {
         ready=true;
         try {
             dataOut.writeInt(1);// Inicjalizacja gry
+            dataOut.writeInt(Name.length());
+            dataOut.writeChars(Name);
             dataOut.writeInt((int)width);
             dataOut.writeInt((int)height);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -170,13 +184,34 @@ public class Board extends JPanel implements ActionListener {
 
     private void gameOver(Graphics g)
     {
+        Map<String, Integer> Scoreboard=sortByValues(results);
+        System.out.println(Scoreboard);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.setColor(Color.red);
+        g.drawString("ScoreBoard",50,50);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+        for(int i=1;i<Scoreboard.size()+1&&i<10;i++)
+        {
+            g.drawString(i+".  "+(String) Scoreboard.keySet().toArray()[i-1], 50, 50+i*20);
+        }
         g.setColor(Color.CYAN);
         g.drawString("Game Over",x.length/2-50,y.length/2);
         g.drawString("Press Enter To restart",x.length/2-70,y.length/2+50);
         init=true;
 
     }
-
+    public static <K, V extends Comparable<V>> Map<K, V> sortByValues(final Map<K, V> map) {
+        Comparator<K> valueComparator =  new Comparator<K>() {
+            public int compare(K k1, K k2) {
+                int compare = map.get(k2).compareTo(map.get(k1));
+                if (compare == 0) return 1;
+                else return compare;
+            }
+        };
+        Map<K, V> sortedByValues = new TreeMap<K, V>(valueComparator);
+        sortedByValues.putAll(map);
+        return sortedByValues;
+    }
     private class TAdapter extends KeyAdapter {
 
 
@@ -197,6 +232,7 @@ public class Board extends JPanel implements ActionListener {
                 
                 }
             }
+
         }
 
 
@@ -222,4 +258,5 @@ public class Board extends JPanel implements ActionListener {
 
         repaint();
     }
+
 }

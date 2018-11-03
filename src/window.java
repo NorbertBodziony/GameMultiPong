@@ -1,4 +1,4 @@
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -8,7 +8,7 @@ import java.io.IOException;
 public class window extends JFrame {
 
     public byte[] bytes;
-    private Board board;
+    public Board board;
     public  window() {
         board = new Board();
        add(board);
@@ -25,6 +25,16 @@ public class window extends JFrame {
         EventQueue.invokeLater(() -> {
             JFrame ex = new window();
             ex.setVisible(true);
+            /*
+            String Name = (String)JOptionPane.showInputDialog(
+                    ex,
+                    "Enter Your Name",
+                    "Game",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    null,
+                    "ham");
+            ((window) ex).board.Name=Name;*/
             ex.addWindowListener(new java.awt.event.WindowAdapter() {
 
                 public void windowClosing(java.awt.event.WindowEvent windowEvent) {
