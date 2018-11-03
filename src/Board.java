@@ -171,7 +171,8 @@ public class Board extends JPanel implements ActionListener {
 
             g.drawString(Integer.toString(frameInLastSecond) + " fps", 60, 20);
 
-        } else {
+        }
+        else {
 
             g.drawString("W8ing for 2nd player",x.length/2-50,y.length/2);
 
@@ -198,7 +199,9 @@ public class Board extends JPanel implements ActionListener {
         g.setColor(Color.CYAN);
         g.drawString("Game Over",x.length/2-50,y.length/2);
         g.drawString("Press Enter To restart",x.length/2-70,y.length/2+50);
-        init=true;
+        g.drawString(String.valueOf(ready),x.length/2+20,y.length/2+150);
+
+
 
     }
     public static <K, V extends Comparable<V>> Map<K, V> sortByValues(final Map<K, V> map) {
@@ -229,8 +232,9 @@ public class Board extends JPanel implements ActionListener {
             if (((e.getKeyCode() == (KeyEvent.VK_ENTER)))) {
 
                 if(ready==false){
-                initGame();
-                
+
+                    initGame();
+                    System.out.println(ready);
                 }
             }
 

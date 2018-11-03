@@ -42,7 +42,7 @@ public class UdpClient extends Thread {
              DataInputStream dataIn = new DataInputStream(byteIn);
             try {
                 type = dataIn.readInt();
-                System.out.println(type);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -61,9 +61,8 @@ public class UdpClient extends Thread {
                 System.out.println("GAME START");
                 try {
                     board.inGame=dataIn.readBoolean();
-                    if (board.inGame==false){
-                        board.ready=false;}
-                    System.out.println(board.inGame);
+                    
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
