@@ -194,7 +194,7 @@ public class Board extends JPanel implements ActionListener {
 
                 if(ready==false){
                 initGame();
-                //System.out.println("w8ing for 2nd player");
+                
                 }
             }
         }
