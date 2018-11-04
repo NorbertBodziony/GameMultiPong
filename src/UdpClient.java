@@ -60,8 +60,11 @@ public class UdpClient extends Thread {
             {
                 System.out.println("GAME START");
                 try {
+                    if(board.inGame==true)
+                    {
+                        board.ready=false;
+                    }
                     board.inGame=dataIn.readBoolean();
-                    
 
                 } catch (IOException e) {
                     e.printStackTrace();
